@@ -1,0 +1,12 @@
+<UserControl x:Class="WpfApp1.Controls.AudioWaveform"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="40">
+    <Grid>
+        <Polyline x:Name="WaveformLine"
+                  Stroke="#007AFF"
+                  StrokeThickness="2"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Center"/>
+    </Grid>
+</UserControl> 

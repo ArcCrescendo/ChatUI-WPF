@@ -1,0 +1,99 @@
+﻿<Window x:Class="WpfApp1.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Background="{DynamicResource ApplicationBackgroundBrush}"
+        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+        Title="设置" Height="850" Width="500"
+        WindowStartupLocation="CenterScreen"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="OpenAI API 设置" 
+                       FontSize="20" 
+                       FontWeight="Bold" 
+                       Margin="0,0,0,20"/>
+            
+            <TextBlock Text="API Key:" Margin="0,5"/>
+            <TextBox x:Name="ApiKeyInput" Margin="0,5"/>
+            
+            <TextBlock Text="Base URL:" Margin="0,15,0,5"/>
+            <TextBox x:Name="BaseUrlInput" Margin="0,5"/>
+            
+            <TextBlock Text="模型选择:" Margin="0,15,0,5"/>
+            <StackPanel x:Name="ModelOptions" Margin="0,5">
+                <RadioButton Content="gpt-3.5-turbo" 
+                            GroupName="ModelGroup" 
+                            Margin="0,5"
+                            Checked="ModelOption_Checked"/>
+                <RadioButton Content="gpt-4" 
+                            GroupName="ModelGroup"
+                            Margin="0,5"
+                            Checked="ModelOption_Checked"/>
+                <RadioButton Content="gpt-4-turbo-preview" 
+                            GroupName="ModelGroup"
+                            Margin="0,5"
+                            Checked="ModelOption_Checked"/>
+                <RadioButton Content="gpt-3.5-turbo-16k" 
+                            GroupName="ModelGroup"
+                            Margin="0,5"
+                            Checked="ModelOption_Checked"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Margin="0,10">
+                <CheckBox x:Name="UseCustomModelCheckbox" 
+                          Content="使用自定义模型"
+                          Checked="UseCustomModel_CheckedChanged"
+                          Unchecked="UseCustomModel_CheckedChanged"/>
+                <TextBox x:Name="CustomModelInput" 
+                         Margin="10,0,0,0" 
+                         Width="200"
+                         IsEnabled="{Binding IsChecked, ElementName=UseCustomModelCheckbox}"/>
+            </StackPanel>
+
+            <TextBlock Text="音频设备:" Margin="0,20,0,5"/>
+            <ComboBox x:Name="AudioDeviceComboBox" 
+                      Margin="0,5"
+                      SelectionChanged="AudioDeviceComboBox_SelectionChanged"/>
+
+            <TextBlock Text="语音识别模型:" Margin="0,20,0,5"/>
+            <StackPanel Orientation="Vertical" Margin="0,5">
+                <RadioButton x:Name="WhisperModelFull" 
+                             Content="完整英文模型 (ggml-base.en.bin)"
+                             GroupName="WhisperModel"
+                             Margin="0,5"
+                             Checked="WhisperModel_Changed"/>
+                <RadioButton x:Name="WhisperModelBase" 
+                             Content="完整多语言模型 (ggml-base.bin)"
+                             GroupName="WhisperModel"
+                             Margin="0,5"
+                             Checked="WhisperModel_Changed"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Margin="0,20,0,0">
+            <Button x:Name="SaveButton" 
+                    Content="保存" 
+                    Click="SaveButton_Click"
+                    Width="80" 
+                    Height="30" 
+                    Margin="0,0,10,0"/>
+            <Button x:Name="CancelButton" 
+                    Content="取消" 
+                    Click="CancelButton_Click"
+                    Width="80" 
+                    Height="30"/>
+        </StackPanel>
+    </Grid>
+</Window>

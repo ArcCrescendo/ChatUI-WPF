@@ -1,0 +1,242 @@
+﻿<UserControl x:Class="WpfApp1.ChatUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1"
+             xmlns:controls="clr-namespace:WpfApp1.Controls"
+             xmlns:converters="clr-namespace:WpfApp1.Converters"
+             mc:Ignorable="d" 
+             Background="{DynamicResource ApplicationBackgroundBrush}"
+             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+             d:DesignHeight="800" d:DesignWidth="500"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- 左侧导航栏 -->
+        <Grid Grid.Column="0" 
+              Background="{DynamicResource ControlFillColorDefaultBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 导航按钮区域 -->
+            <StackPanel Grid.Row="1" Margin="0,10">
+                <Button x:Name="btnNewChat" 
+                        Height="60"
+                        Width="60"
+                        Margin="5,2"
+                        ToolTip="新建对话">
+                    <StackPanel>
+                        <ui:SymbolIcon Symbol="Add24"/>
+                        <TextBlock Text="新建"
+                                  FontSize="11"
+                                  Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="btnHistory" 
+                        Height="60"
+                        Width="60"
+                        Margin="5,2"
+                        Click="BtnHistory_Click"
+                        ToolTip="历史记录">
+                    <StackPanel>
+                        <ui:SymbolIcon Symbol="History24"/>
+                        <TextBlock Text="历史"
+                                  FontSize="11"
+                                  Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="btnClearContext" 
+                        Height="60"
+                        Width="60"
+                        Margin="5,2"
+                        ToolTip="清除上下文">
+                    <StackPanel>
+                        <ui:SymbolIcon Symbol="Delete24"/>
+                        <TextBlock Text="清除"
+                                  FontSize="11"
+                                  Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <!-- 底部设置按钮 -->
+            <Button x:Name="btnSettings"
+                    Grid.Row="2"
+                    Height="60"
+                    Width="60"
+                    Margin="5,2,5,10"
+                    ToolTip="设置">
+                <StackPanel>
+                    <ui:SymbolIcon Symbol="Settings24"/>
+                    <TextBlock Text="设置"
+                              FontSize="11"
+                              Margin="0,2,0,0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <!-- 主聊天区域 -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <!-- 聊天内容区域 -->
+            <ScrollViewer x:Name="ChatScrollViewer" 
+                         Grid.Row="0"
+                          Grid.RowSpan="2"
+                         Margin="10,10,10,105">
+                <ItemsControl x:Name="ChatMessages">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="10,5" 
+                                    Padding="10" 
+                                    CornerRadius="5"
+                                    Background="{Binding IsUser, Converter={StaticResource MessageBackgroundConverter}}"
+                                    HorizontalAlignment="{Binding IsUser, Converter={StaticResource MessageAlignmentConverter}}">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <controls:MarkdownViewer 
+                                        Markdown="{Binding Content}"
+                                        MaxWidth="600"
+                                        Margin="0,0,0,5"/>
+                                    
+                                    <StackPanel Grid.Row="1" 
+                                                Orientation="Horizontal" 
+                                                HorizontalAlignment="Right"
+                                                Margin="0,5,0,0">
+                                        <!-- 重新生成按钮 -->
+                                        <Button Click="RegenerateMessage_Click"
+                                                Padding="5,2"
+                                                Margin="0,0,5,0"
+                                                Visibility="{Binding IsUser, Converter={StaticResource BotMessageButtonVisibilityConverter}}"
+                                                Style="{StaticResource TransparentButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon Symbol="ArrowCounterclockwise32"></ui:SymbolIcon>
+                                                <TextBlock Text="重新生成" 
+                                                          Margin="5,0,0,0" 
+                                                          FontSize="14"/>
+                                            </StackPanel>
+                                        </Button>
+                                        
+                                        
+                                        <!-- 现有的复制按钮 -->
+                                        <Button Grid.Column="1" 
+                                                Click="CopyMessage_Click"
+                                                Padding="5,2"
+                                                Visibility="{Binding IsUser, Converter={StaticResource UserMessageButtonVisibilityConverter}}"
+                                                Style="{StaticResource TransparentButton}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <ui:SymbolIcon Symbol="DocumentCopy24"></ui:SymbolIcon>
+                                                <TextBlock Text="复制" 
+                                                         Margin="5,0,0,0" 
+                                                         FontSize="14"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- 加载动画 -->
+            <controls:TypingIndicator x:Name="LoadingIndicator" 
+                                  Grid.Row="1" 
+                                  HorizontalAlignment="Left" 
+                                  VerticalAlignment="Bottom"
+                                  Margin="20,0,0,50"
+                                  Visibility="Collapsed"/>
+
+            <!-- 底部输入区域 -->
+            <Grid  Grid.Row="1" Margin="0" VerticalAlignment="Bottom">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- 输入框和语音按钮的容器 -->
+                <Grid Grid.Row="0" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 输入框 -->
+                    <TextBox x:Name="MessageInput" 
+                             Grid.Column="0"
+                             TextWrapping="Wrap" 
+                             AcceptsReturn="True"
+                             VerticalAlignment="Stretch" 
+                             Margin="0,0,10,0"/>
+
+                    <!-- 语音输入按钮 -->
+                    <Button x:Name="VoiceInputButton" 
+                            Grid.Column="1"
+                            Width="60" 
+                            Height="60"
+                            Click="VoiceInputButton_Click"
+                            ToolTip="语音输入">
+                        <Button.Resources>
+                            <Storyboard x:Key="ProcessingAnimation">
+                                <ColorAnimation 
+                                    Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                    From="#007AFF" To="#FF0000" Duration="0:0:1"
+                                    AutoReverse="True"
+                                    RepeatBehavior="Forever"/>
+                            </Storyboard>
+                        </Button.Resources>
+                        <ui:SymbolIcon Symbol="Mic24"/>
+                    </Button>
+                </Grid>
+
+                <!-- 发送按钮 -->
+                <Button x:Name="SendButton" 
+                        Grid.Row="1"
+                        Content="发送" 
+                        Height="40"
+                        Margin="10,0,10,10"
+                        HorizontalAlignment="Stretch"/>
+
+                <!-- 音频波形显示 -->
+                <controls:AudioWaveform x:Name="AudioWaveform" 
+                                       Grid.Row="0"
+                                       Height="60"
+                                       Margin="5"
+                                       HorizontalAlignment="Stretch"
+                                       Visibility="Collapsed"/>
+            </Grid>
+        </Grid>
+
+        <!-- 历史记录侧边栏 -->
+        <Grid x:Name="HistoryPanel" 
+              Grid.Column="2" 
+              Width="0">
+            <Grid.RenderTransform>
+                <TranslateTransform x:Name="HistoryPanelTransform"/>
+            </Grid.RenderTransform>
+            
+            <controls:ChatHistory x:Name="ChatHistoryControl"/>
+        </Grid>
+    </Grid>
+</UserControl>
